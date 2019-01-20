@@ -12,5 +12,18 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(tidyverse)
 library(keras)
+library(rprojroot)
+library(fs)
+```
+
+```{r}
+img_width <- 299
+img_height <- 299
+```
+
+```{r}
+root <- find_root(has_dir(".git"))
+train_data_directory <- path(root, "data", "TRAIN")
+validation_data_directory <- path(root, "data", "VAL")
 ```
 
