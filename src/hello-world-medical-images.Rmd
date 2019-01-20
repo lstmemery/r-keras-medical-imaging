@@ -1,0 +1,16 @@
+---
+title: "Hello World for Medical Images"
+author: "Matthew Emery"
+date: "January 20, 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(keras)
+```
+
