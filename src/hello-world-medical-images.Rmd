@@ -17,8 +17,8 @@ library(fs)
 ```
 
 ```{r}
-img_height <- 299
-img_width <- 299
+img_height <- 299L
+img_width <- 299L
 ```
 
 ```{r}
@@ -28,10 +28,10 @@ validation_data_directory <- path(root, "data", "VAL")
 ```
 
 ```{r}
-train_samples <- 65
-validation_samples <- 10
-epochs <- 20
-batch_size <- 5
+train_samples <- 65L
+validation_samples <- 10L
+epochs <- 20L
+batch_size <- 5L
 ```
 
 ```{r}
@@ -74,21 +74,27 @@ validation_generator <- validation_data_generator$flow_from_directory(
 base_model <- application_inception_v3(
   weights = "imagenet",
   include_top = FALSE,
-  input_shape = c(img_width, img_height, 3)
+  input_shape = c(img_width, img_height, 3L)
 )
 ```
 
+
 ```{r}
-input_shape = base_model$output_shape[[2]]
+for (layer in base_model$layers)
+  layer$trainable <- TRUE
 ```
 
 
 ```{r}
 model_top <- base_model$output %>% 
-  layer_average_pooling_2d() %>% 
-  layer_dense(256, activation = "relu") %>% 
+  layer_global_average_pooling_2d(trainable = TRUE) %>% 
+  layer_dense(256L, 
+              activation = "relu",
+              trainable = TRUE) %>% 
   layer_dropout(0.5) %>% 
-  layer_dense(1, activation = "sigmoid")
+  layer_dense(1L,
+              trainable = TRUE,
+              activation = "sigmoid")
 ```
 
 ```{r}
@@ -100,14 +106,26 @@ full_model <- keras_model(
       lr = 0.0001,
       epsilon = 1e-08
     ),
-    loss = "categorical_crossentropy",
+    loss = "binary_crossentropy",
     metrics = c("accuracy")
   )  
 ```
 
+# TODO: Should probably freeze Inception weights
 
 ```{r}
+history <- fit_generator(
+  full_model,
+  generator = train_generator,
+  steps_per_epoch = as.integer(train_samples / batch_size),
+  epochs = epochs,
+  validation_data = validation_generator,
+  validation_steps = as.integer(validation_samples / batch_size)
+)
+```
 
+```{r}
+summary(full_model)
 ```
 
 
