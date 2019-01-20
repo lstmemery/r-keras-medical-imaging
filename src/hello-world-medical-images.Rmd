@@ -70,5 +70,45 @@ validation_generator <- validation_data_generator$flow_from_directory(
 )
 ```
 
+```{r}
+base_model <- application_inception_v3(
+  weights = "imagenet",
+  include_top = FALSE,
+  input_shape = c(img_width, img_height, 3)
+)
+```
+
+```{r}
+input_shape = base_model$output_shape[[2]]
+```
+
+
+```{r}
+model_top <- base_model$output %>% 
+  layer_average_pooling_2d() %>% 
+  layer_dense(256, activation = "relu") %>% 
+  layer_dropout(0.5) %>% 
+  layer_dense(1, activation = "sigmoid")
+```
+
+```{r}
+full_model <- keras_model(
+  inputs = base_model$input,
+  outputs = model_top) %>% 
+  keras::compile(
+    optimizer = optimizer_adam(
+      lr = 0.0001,
+      epsilon = 1e-08
+    ),
+    loss = "categorical_crossentropy",
+    metrics = c("accuracy")
+  )  
+```
+
+
+```{r}
+
+```
+
 
 ## Bibliography
