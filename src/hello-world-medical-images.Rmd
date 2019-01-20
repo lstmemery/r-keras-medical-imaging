@@ -17,8 +17,8 @@ library(fs)
 ```
 
 ```{r}
-img_width <- 299
 img_height <- 299
+img_width <- 299
 ```
 
 ```{r}
@@ -27,3 +27,48 @@ train_data_directory <- path(root, "data", "TRAIN")
 validation_data_directory <- path(root, "data", "VAL")
 ```
 
+```{r}
+train_samples <- 65
+validation_samples <- 10
+epochs <- 20
+batch_size <- 5
+```
+
+```{r}
+train_data_generator <- image_data_generator(
+  rescale = 1/255,
+  shear_range = 0.2,
+  zoom_range = 0.2,
+  rotation_range = 20,
+  width_shift_range = 0.2,
+  height_shift_range = 0.2,
+  horizontal_flip = TRUE
+)
+```
+
+```{r}
+validation_data_generator <- image_data_generator(
+  rescale = 1/255
+)
+```
+
+```{r}
+train_generator <- train_data_generator$flow_from_directory(
+  train_data_directory,
+  target_size = c(img_height, img_width),
+  batch_size = batch_size,
+  class_mode = "binary"
+)
+```
+
+```{r}
+validation_generator <- validation_data_generator$flow_from_directory(
+  validation_data_directory,
+  target_size = c(img_height, img_width),
+  batch_size = batch_size,
+  class_mode = "binary"
+)
+```
+
+
+## Bibliography
