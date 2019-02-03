@@ -64,25 +64,57 @@ TODO: Image here?
 - In between those multiplications, we apply a special function to make sure the ordering of the arrays matter TODO: Clean I do better?
 - We slightly adjust these numbers using a fancy version of first year calculus
 
+
+### A Few Terms
+- Loss Function: The function that the neural network is trying to minimize
+- Batch Size: The number of images we feed into the neural net at a time
+- Epochs: The number of times we see the whole training set
+
 TODO: Get one of those dumb brain/machine images
 
+TODO: Explain what this Dataset is
+
+
 ```{r}
+# Constants
 img_height <- 299L
 img_width <- 299L
-```
-
-```{r}
-root <- find_root(has_dir(".git"))
-train_data_directory <- path(root, "data", "TRAIN")
-validation_data_directory <- path(root, "data", "VAL")
-```
-
-```{r}
 train_samples <- 65L
 validation_samples <- 10L
 epochs <- 20L
 batch_size <- 5L
 ```
+
+### How do we know if this will work?
+- Separate your files into three groups, training, validation and testing
+- Training images are the images that the neural net will use to update it's weights
+- After we go through all the images once, check against the validation set
+- If the loss for the training set goes down but the loss for the validation set goes up, the network may have overfit
+- The test set is only used after the model is completely trained
+TODO: Study, Midterm, Final analogy
+
+```{r}
+# Finding Training 
+root <- find_rstudio_root_file()
+train_data_directory <- path(root, "data", "TRAIN")
+validation_data_directory <- path(root, "data", "VAL")
+```
+
+```{r}
+knitr::include_graphics(path(train_data_directory, "openI_abd_xray", "openI_1.png"))
+```
+
+```{r}
+knitr::include_graphics(path(train_data_directory, "openI_CXR", "3_IM-1384-1001.png"))
+```
+
+### Preparing images
+
+- Notice that these images are different sizes
+- Also the first image is slightly off-center
+- We want the network to be robust, so we will randomly change each image slightly
+
+TODO: Explain training generation
 
 ```{r}
 train_data_generator <- image_data_generator(
