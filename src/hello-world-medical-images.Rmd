@@ -24,11 +24,8 @@ Install R 3.5:
 Install RStudio Desktop (Free): https://www.rstudio.com/products/rstudio/download/#download
 Download and extract the code to this talk: https://github.com/lstmemery/r-keras-medical-imaging/archive/master.zip
 Click on the .Rproj file
-`packrat::restore()`
+`packrat::restore()` (This will take a while, please do it before the talk)
 `keras::install_keras()`
-
-
-
 
 ### Who Am I?
 
@@ -36,21 +33,38 @@ Click on the .Rproj file
 - Previously: Software Developer at STEMCELL Technologies
 - You can reach me at me@matthewemery.ca
 
-### Have you installed everything?
-
-- It will take a long to install, start now if you don't already have it
-- Download the code for this talk at https://github.com/lstmemery/r-keras-medical-imaging
-- Once
-
 ### Acknowledgements
 TODO: Acknowledge Fast.ai and the dataset creators
 
-
 ### Game Plan
 TODO: Probably a lot more
- 1. What is a neural network?
+ 1. Defining some terms
  2. Example
 
+### What is Machine Learning?
+
+- Most of the time, programmers have input data and they apply a known function to get an unknown output
+- Machine learning is when you have input data and known outputs and the program "learns" the rules to transform input to output TODO: Improve
+- Examples: Linear Regression, Random Forest, Neural Networks
+
+Aside: I'm talking only about supervised learning here
+
+TODO: Image here?
+
+### Why Should I Care About Neural Nets?
+
+- Training is more "end-to-end" (i.e. they can learn features about data)
+- They are much better at high visibility problems (Speech recognition, machine translation, computer vision)
+- Tech companies open source really big neural networks that you can adapt for your problems
+
+### What are Neural Nets? (Please, No Math)
+
+- They are NOT electronic brains
+- They are large arrays of numbers that get multiplied by one another
+- In between those multiplications, we apply a special function to make sure the ordering of the arrays matter TODO: Clean I do better?
+- We slightly adjust these numbers using a fancy version of first year calculus
+
+TODO: Get one of those dumb brain/machine images
 
 ```{r}
 img_height <- 299L
