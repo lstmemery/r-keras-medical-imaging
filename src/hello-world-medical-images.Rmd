@@ -1,7 +1,7 @@
 ---
-title: "Hello World for Medical Images"
+title: "A First Glance at Neural Networks for Computer Vision"
 author: "Matthew Emery"
-date: "January 20, 2019"
+date: "January 12, 2019"
 output: revealjs::revealjs_presentation
 bibliography: bibliography.bib
 ---
@@ -28,21 +28,23 @@ Click on the .Rproj file
 `packrat::restore()` (This will take a while, please do it before the talk)
 `keras::install_keras()`
 
-### Who Am I?
+## Who Am I?
 
 - Alumni of the UBC Master of Data Science Program
 - Previously: Software Developer at STEMCELL Technologies
-- You can reach me at me@matthewemery.ca
+- I work for a Los Angeles-based start-up building simulation-based assessments
 
-### Acknowledgements
+## Acknowledgements
+
+ - Fast.ai
 TODO: Acknowledge Fast.ai and the dataset creators
 
-### Game Plan
+## Game Plan
 TODO: Probably a lot more
  1. Defining some terms
  2. Example
 
-### What is Machine Learning?
+## What is Machine Learning?
 
 - Most of the time, programmers have input data and they apply a known function to get an unknown output
 - Machine learning is when you have input data and known outputs and the program "learns" the rules to transform input to output TODO: Improve
@@ -52,20 +54,20 @@ Aside: I'm talking only about supervised learning here
 
 TODO: Image here?
 
-### Why Should I Care About Neural Nets?
+## Why Should I Care About Neural Nets?
 
 - Training is more "end-to-end" (i.e. they can learn features about data)
 - They are much better at high visibility problems (Speech recognition, machine translation, computer vision)
 - Tech companies open source really big neural networks that you can adapt for your problems
 
-### What are Neural Nets? (Please, No Math)
+## What are Neural Nets? (Please, No Math)
 
 - They are NOT electronic brains
 - They are large arrays of numbers that get multiplied by one another
 - In between those multiplications, we apply a special function to make sure the ordering of the arrays matter TODO: Clean I do better?
 - We slightly adjust these numbers using a fancy version of first year calculus
 
-### What are Convolutional Neural Networks (CNNs)?
+## What are Convolutional Neural Networks (CNNs)?
 
 - CNNs are neural networks that work very well for images (and a few other applications)
 - The idea is that basic features of an image (edges, corners etc.) are useful to know about regardless of where they appear in an image
@@ -74,12 +76,12 @@ TODO: Image here?
 TODO: Will probably need more slides for this
 TODO: Image of a convolution moving
 
-### How do you build neural networks
+## How do you build neural networks
 - There are many frameworks in many languages
 - The most popular language is Python
 - We are using the high level framework called Keras and R
 
-### A Few Terms
+## A Few Terms
 - Loss Function: The function that the neural network is trying to minimize
 - Batch Size: The number of images we feed into the neural net at a time
 - Epochs: The number of times we see the whole training set
@@ -101,7 +103,7 @@ epochs <- 5L
 batch_size <- 5L
 ```
 
-### Will This Be on the Test?
+## Will This Be on the Test?
 - Separate your files into three groups, training, validation and testing
 - Think of them as textbook exercises, midterms and the final
 - If you overstudy on the only a few questions, you will have only memorized the answers without learning 
@@ -126,7 +128,7 @@ knitr::include_graphics(path(train_data_directory, "openI_abd_xray", "openI_1.pn
 knitr::include_graphics(path(train_data_directory, "openI_CXR", "3_IM-1384-1001.png"))
 ```
 
-### Preparing images
+## Preparing images
 
 - Notice that these images are different sizes
 - Also the first image is slightly off-center
@@ -171,7 +173,7 @@ validation_generator <- validation_data_generator$flow_from_directory(
 )
 ```
 
-### Transfer Learning
+## Transfer Learning
 - Google has a designed an archicture to identify images called Inception-v3
 - These architectures are tested on ImageNet, a global competition to classify 1.4 million images into 1000 categories
 
