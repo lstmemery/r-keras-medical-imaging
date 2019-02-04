@@ -162,11 +162,6 @@ train_generator <- train_data_generator$flow_from_directory(
 ```
 
 ```{r}
-train_generator$get_random_transform()
-```
-
-
-```{r}
 validation_generator <- validation_data_generator$flow_from_directory(
   validation_data_directory,
   target_size = c(img_height, img_width),
@@ -177,7 +172,7 @@ validation_generator <- validation_data_generator$flow_from_directory(
 
 ### Transfer Learning
 - Google has a designed an archicture to identify images called Inception-v3
-- These architectures are tested on ImageNet, a global competition to classify millions of images into thousands of categories
+- These architectures are tested on ImageNet, a global competition to classify 1.4 million images into 1000 categories
 
 TODO: Cite https://en.wikipedia.org/wiki/ImageNet
 TODO: Add example Imagenet picture
@@ -199,6 +194,8 @@ for (layer in base_model$layers)
 ```
 
 
+TODO: Add explanation of transferring
+
 ```{r}
 model_top <- base_model$output %>% 
   layer_global_average_pooling_2d(trainable = TRUE) %>% # TODO explain this
@@ -217,18 +214,16 @@ full_model <- keras_model(
   outputs = model_top) %>% 
   keras::compile(
     optimizer = optimizer_adam(
-      lr = 0.0001,
-      epsilon = 1e-08
+      lr = 0.0001, # How much do we update weights?
+      epsilon = 1e-08 # Prevents Divide by 0 errors
     ),
     loss = "binary_crossentropy",
     metrics = c("accuracy")
   )  
 ```
 
-# TODO: Should probably freeze Inception weights
-
 ```{r}
-history <- fit_generator(
+history <- fit_generator( # Fit model
   full_model,
   generator = train_generator,
   steps_per_epoch = as.integer(train_samples / batch_size),
