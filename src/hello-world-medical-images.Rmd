@@ -64,6 +64,19 @@ TODO: Image here?
 - In between those multiplications, we apply a special function to make sure the ordering of the arrays matter TODO: Clean I do better?
 - We slightly adjust these numbers using a fancy version of first year calculus
 
+### What are Convolutional Neural Networks (CNNs)?
+
+- CNNs are neural networks that work very well for images (and a few other applications)
+- The idea is that basic features of an image (edges, corners etc.) are useful to know about regardless of where they appear in an image
+- This allows the network to "share weights" between different areas of an image
+
+TODO: Will probably need more slides for this
+TODO: Image of a convolution moving
+
+### How do you build neural networks
+- There are many frameworks in many languages
+- The most popular language is Python
+- We are using the high level framework called Keras and R
 
 ### A Few Terms
 - Loss Function: The function that the neural network is trying to minimize
@@ -71,6 +84,8 @@ TODO: Image here?
 - Epochs: The number of times we see the whole training set
 
 TODO: Get one of those dumb brain/machine images
+
+
 
 TODO: Explain what this Dataset is
 
@@ -85,13 +100,15 @@ epochs <- 20L
 batch_size <- 5L
 ```
 
-### How do we know if this will work?
+### Will This Be on the Test?
 - Separate your files into three groups, training, validation and testing
-- Training images are the images that the neural net will use to update it's weights
-- After we go through all the images once, check against the validation set
-- If the loss for the training set goes down but the loss for the validation set goes up, the network may have overfit
-- The test set is only used after the model is completely trained
-TODO: Study, Midterm, Final analogy
+- Think of them as textbook exercises, midterms and the final
+- If you overstudy on the only a few questions, you will have only memorized the answers without learning 
+- When a machine learning algorithm, this is called overfitting
+- The validation set is used at the end of each epoch to guage overfitting. 
+- The neural net isn't allowed to learn from the validation set directly 
+- The test set is only used after the model is completely trained.
+- The test set is used to compare between models.
 
 ```{r}
 # Finding Training 
@@ -117,6 +134,7 @@ knitr::include_graphics(path(train_data_directory, "openI_CXR", "3_IM-1384-1001.
 TODO: Explain training generation
 
 ```{r}
+#Play around with this!
 train_data_generator <- image_data_generator(
   rescale = 1/255,
   shear_range = 0.2,
@@ -144,6 +162,11 @@ train_generator <- train_data_generator$flow_from_directory(
 ```
 
 ```{r}
+train_generator$get_random_transform()
+```
+
+
+```{r}
 validation_generator <- validation_data_generator$flow_from_directory(
   validation_data_directory,
   target_size = c(img_height, img_width),
@@ -152,26 +175,35 @@ validation_generator <- validation_data_generator$flow_from_directory(
 )
 ```
 
+### Transfer Learning
+- Google has a designed an archicture to identify images called Inception-v3
+- These architectures are tested on ImageNet, a global competition to classify millions of images into thousands of categories
+
+TODO: Cite https://en.wikipedia.org/wiki/ImageNet
+TODO: Add example Imagenet picture
+
 ```{r}
 base_model <- application_inception_v3(
   weights = "imagenet",
-  include_top = FALSE,
-  input_shape = c(img_width, img_height, 3L)
+  include_top = FALSE, # Keep the classification layer?
+  input_shape = c(img_width, 
+                  img_height, 
+                  3L) # Three color channels
 )
 ```
 
 
 ```{r}
 for (layer in base_model$layers)
-  layer$trainable <- TRUE
+  layer$trainable <- TRUE # This let's all the weights in the model to move
 ```
 
 
 ```{r}
 model_top <- base_model$output %>% 
-  layer_global_average_pooling_2d(trainable = TRUE) %>% 
+  layer_global_average_pooling_2d(trainable = TRUE) %>% # TODO explain this
   layer_dense(256L, 
-              activation = "relu",
+              activation = "relu", # max(0, x)
               trainable = TRUE) %>% 
   layer_dropout(0.5) %>% 
   layer_dense(1L,
