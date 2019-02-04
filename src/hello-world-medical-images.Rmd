@@ -1,8 +1,10 @@
 ---
-title: "A First Glance at Neural Networks for Computer Vision"
+title: "A First Glance at Neural Networks for Medical Computer Vision"
 author: "Matthew Emery"
 date: "January 12, 2019"
-output: revealjs::revealjs_presentation
+output: 
+  revealjs::revealjs_presentation
+    theme: "night"
 bibliography: bibliography.bib
 ---
 
@@ -18,15 +20,15 @@ library(fs)
 ```
 
 ## Installation Guide
-Install R 3.5:
+- Install R 3.5:
  - Windows: https://cran.r-project.org/bin/windows/base/
  - Mac: https://cran.r-project.org/bin/macosx/
  - Ubuntu: https://cran.r-project.org/bin/linux/ubuntu/README.html
-Install RStudio Desktop (Free): https://www.rstudio.com/products/rstudio/download/#download
-Download and extract the code to this talk: https://github.com/lstmemery/r-keras-medical-imaging/archive/master.zip
-Click on the .Rproj file
-`packrat::restore()` (This will take a while, please do it before the talk)
-`keras::install_keras()`
+- Install RStudio Desktop (Free): https://www.rstudio.com/products/rstudio/download/#download
+- Download and extract the code to this talk: https://github.com/lstmemery/r-keras-medical-imaging/archive/master.zip
+- Click on the .Rproj file
+- `packrat::restore()` (This will take a while, please do it before the talk)
+- `keras::install_keras()`
 
 ## Who Am I?
 
@@ -36,18 +38,14 @@ Click on the .Rproj file
 
 ## Acknowledgements
 
- - Fast.ai
-TODO: Acknowledge Fast.ai and the dataset creators
-
-## Game Plan
-TODO: Probably a lot more
- 1. Defining some terms
- 2. Example
+ - There a bibliography at the end
+ - This presentation is an adaptation of "Hello World Deep Learning in Medical Imaging"
+ - The style is an adaptation of Fast.ai 
 
 ## What is Machine Learning?
 
-- Most of the time, programmers have input data and they apply a known function to get an unknown output
-- Machine learning is when you have input data and known outputs and the program "learns" the rules to transform input to output TODO: Improve
+- Most of the time, programmers have input data and they apply a **known function** to get an unknown output
+- Machine learning is when you have input data and known outputs learn an **unknown function**
 - Examples: Linear Regression, Random Forest, Neural Networks
 
 Aside: I'm talking only about supervised learning here
@@ -64,7 +62,8 @@ TODO: Image here?
 
 - They are NOT electronic brains
 - They are large arrays of numbers that get multiplied by one another
-- In between those multiplications, we apply a special function to make sure the ordering of the arrays matter TODO: Clean I do better?
+- In between those multiplications, we apply a special function called an **activation function**
+
 - We slightly adjust these numbers using a fancy version of first year calculus
 
 ## What are Convolutional Neural Networks (CNNs)?
