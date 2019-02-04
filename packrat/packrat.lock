@@ -373,6 +373,12 @@ Version: 1.10
 Hash: d8ce0696c36e093e1db60de28b717881
 Requires: Rcpp, jsonlite
 
+Package: revealjs
+Source: CRAN
+Version: 0.9
+Hash: d33e5b244ff56eaec0dec87babea8730
+Requires: rmarkdown
+
 Package: rlang
 Source: CRAN
 Version: 0.3.1

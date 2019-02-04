@@ -2,7 +2,8 @@
 title: "Hello World for Medical Images"
 author: "Matthew Emery"
 date: "January 20, 2019"
-output: html_document
+output: revealjs::revealjs_presentation
+bibliography: bibliography.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -16,7 +17,7 @@ library(rprojroot)
 library(fs)
 ```
 
-### Installation Guide
+## Installation Guide
 Install R 3.5:
  - Windows: https://cran.r-project.org/bin/windows/base/
  - Mac: https://cran.r-project.org/bin/macosx/
@@ -96,7 +97,7 @@ img_height <- 299L
 img_width <- 299L
 train_samples <- 65L
 validation_samples <- 10L
-epochs <- 20L
+epochs <- 5L
 batch_size <- 5L
 ```
 
