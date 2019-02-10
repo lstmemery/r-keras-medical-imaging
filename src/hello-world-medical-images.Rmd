@@ -24,15 +24,12 @@ TODO: Make font sizes larger
 
 ## Installation Guide
 
-1. Install R 3.5:
-  - Windows: https://cran.r-project.org/bin/windows/base/
-  - Mac: https://cran.r-project.org/bin/macosx/
-  - Ubuntu: https://cran.r-project.org/bin/linux/ubuntu/README.html
-2. Install RStudio Desktop (Free): https://www.rstudio.com/products/rstudio/download/#download
-3. Download and extract the code to this talk: https://github.com/lstmemery/r-keras-medical-imaging/archive/master.zip
-4. Click on the .Rproj file
-5. `packrat::restore()` (This will take a while, please do it before the talk)
-6. `keras::install_keras()`
+ 1. Install R 3.5: https://cran.r-project.org/
+ 2. Install RStudio Desktop (Free): https://www.rstudio.com/products/rstudio/download/#download
+ 3. Download and extract the code to this talk: https://github.com/lstmemery/r-keras-medical-imaging/archive/master.zip
+ 4. Click on the .Rproj file
+ 5. `packrat::restore()` (This will take a while, please do it before the talk)
+ 6. `keras::install_keras()`
 
 ## Who Am I?
 
@@ -68,10 +65,9 @@ TODO: Make font sizes larger
 
 ## What are Neural Nets? (Please, No Math)
 
-- They are NOT electronic brains
 - They are large arrays of numbers that get multiplied by one another
 - In between those multiplications, we apply a special function called an **activation function**
-- We slightly adjust these numbers using a fancy version of first year calculus
+- Adjust these numbers using the **chain rule** for derivatives
 
 ![https://hackernoon.com/artificial-neural-network-a843ff870338](./img/neural-net-diagram.png)
 
@@ -82,8 +78,7 @@ TODO: Make font sizes larger
 ## What are Convolutional Neural Networks (CNNs)?
 
 - CNNs are neural networks that work very well for images
-- The idea is that basic features of an image (edges etc.) are useful to know about
-- Combinations of basic features can make more complex features further into the network
+- The idea is that basic features of an image (edges etc.) are useful to know about anywhere in the image
 - This allows the network to **share weights** between different areas of an image
 
 <aside class="notes">Other applications: Natural language processing, Video</aside>
@@ -92,20 +87,25 @@ TODO: Make font sizes larger
 
 ## First Layer Activations
 
-![http://cs231n.github.io/understanding-cnn/](./img/src/1st-layer.jpeg)
+![http://cs231n.github.io/understanding-cnn/](./img/1st-layer.jpeg)
+
+## Second Layer Activations
+
+![http://cs231n.github.io/understanding-cnn/](./img/2nd-layer.jpeg)
 
 ## How do you build neural networks?
 
 - There are many frameworks in many languages
-- The most popular language is Python
-- We are using the high-level framework called Keras and R
+- The most popular language is **Python**
+- We are using the high-level framework called **Keras** and **R**
+
+<aside class="notes">Other popular frameworks: TensorFlow (Keras is built on top) and PyTorch</aside>
 
 ## A Few Terms
 
 - **Loss Function:** The function that the neural network is trying to minimize
 - **Batch Size:** The number of images we feed into the neural net at a time
 - **Epochs:** The number of times we see the whole training set
-
 
 ## The Dataset
 
@@ -137,11 +137,15 @@ epochs <- 1L
 batch_size <- 5L
 ```
 
-## Will This Be on the Test?
-- Separate your files into three groups, training, validation and testing
+## Overfitting
+
+- Separate your files into three groups, **training**, **validation** and **testing**
 - Think of them as textbook exercises, midterms and the final
 - If you overstudy on the only a few questions, you will have only memorized the answers without learning 
-- When a machine learning algorithm, this is called overfitting
+- When a machine learning algorithm, this is called **overfitting**
+
+## Model Validation
+
 - The validation set is used at the end of each epoch to guage overfitting. 
 - The neural net isn't allowed to learn from the validation set directly 
 - The test set is only used after the model is completely trained.
@@ -191,8 +195,7 @@ validation_generator <- validation_data_generator$flow_from_directory(
 - Google has a designed an archicture to identify images called Inception-v3
 - These architectures are tested on ImageNet, a global competition to classify 1.4 million images into 1000 categories
 
-TODO: Cite https://en.wikipedia.org/wiki/ImageNet
-TODO: Add example Imagenet picture
+![https://kaggle.com/c/imagenet-object-localization-challenge](./img/imagenet-bananas.png)
 
 ```{r}
 base_model <- application_inception_v3(
@@ -202,10 +205,7 @@ base_model <- application_inception_v3(
                   img_height, 
                   3L) # Three color channels
 )
-```
 
-
-```{r}
 for (layer in base_model$layers)
   layer$trainable <- TRUE # This let's all the weights in the model to move
 ```
