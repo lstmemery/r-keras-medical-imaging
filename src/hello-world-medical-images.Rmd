@@ -3,7 +3,7 @@ title: "A First Glance at Neural Networks for Medical Computer Vision"
 author: "Matthew Emery"
 date: "January 12, 2019"
 output: 
-  revealjs::revealjs_presentation
+  revealjs::revealjs_presentation:
     theme: "night"
 bibliography: bibliography.bib
 ---
@@ -12,35 +12,37 @@ bibliography: bibliography.bib
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+```{r, echo=FALSE}
 library(tidyverse)
 library(keras)
 library(rprojroot)
 library(fs)
 ```
 
+TODO: Make font sizes larger
+
 ## Installation Guide
-- Install R 3.5:
- - Windows: https://cran.r-project.org/bin/windows/base/
- - Mac: https://cran.r-project.org/bin/macosx/
- - Ubuntu: https://cran.r-project.org/bin/linux/ubuntu/README.html
-- Install RStudio Desktop (Free): https://www.rstudio.com/products/rstudio/download/#download
-- Download and extract the code to this talk: https://github.com/lstmemery/r-keras-medical-imaging/archive/master.zip
-- Click on the .Rproj file
-- `packrat::restore()` (This will take a while, please do it before the talk)
-- `keras::install_keras()`
+1. Install R 3.5:
+  - Windows: https://cran.r-project.org/bin/windows/base/
+  - Mac: https://cran.r-project.org/bin/macosx/
+  - Ubuntu: https://cran.r-project.org/bin/linux/ubuntu/README.html
+2. Install RStudio Desktop (Free): https://www.rstudio.com/products/rstudio/download/#download
+3. Download and extract the code to this talk: https://github.com/lstmemery/r-keras-medical-imaging/archive/master.zip
+4. Click on the .Rproj file
+5. `packrat::restore()` (This will take a while, please do it before the talk)
+6. `keras::install_keras()`
 
 ## Who Am I?
 
 - Alumni of the UBC Master of Data Science Program
 - Previously: Software Developer at STEMCELL Technologies
-- I work for a Los Angeles-based start-up building simulation-based assessments
+- I am a senior data scientist at a Los Angeles-based start-up building simulation-based assessments
 
 ## Acknowledgements
 
  - There a bibliography at the end
  - This presentation is an adaptation of "Hello World Deep Learning in Medical Imaging"
- - The style is an adaptation of Fast.ai 
+ - [Fast.ai](https://www.fast.ai/) provides a great practioner's course on deep learning
 
 ## What is Machine Learning?
 
@@ -48,7 +50,7 @@ library(fs)
 - Machine learning is when you have input data and known outputs learn an **unknown function**
 - Examples: Linear Regression, Random Forest, Neural Networks
 
-Aside: I'm talking only about supervised learning here
+Aside: I'm talking only about **supervised learning** here
 
 TODO: Image here?
 
@@ -72,10 +74,9 @@ TODO: Image here?
 - The idea is that basic features of an image (edges, corners etc.) are useful to know about regardless of where they appear in an image
 - This allows the network to "share weights" between different areas of an image
 
-TODO: Will probably need more slides for this
-TODO: Image of a convolution moving
+![https://hackernoon.com/visualizing-parts-of-convolutional-neural-networks-using-keras-and-cats-5cc01b214e59](./img/convolution.gif)
 
-## How do you build neural networks
+## How do you build neural networks?
 - There are many frameworks in many languages
 - The most popular language is Python
 - We are using the high level framework called Keras and R
@@ -88,8 +89,11 @@ TODO: Image of a convolution moving
 TODO: Get one of those dumb brain/machine images
 
 
+## The Dataset
 
-TODO: Explain what this Dataset is
+ - This is a "toy" dataset
+ - Can we train a model to tell the difference between an abdominal and chest radiograph?
+
 
 
 ```{r}
@@ -98,7 +102,7 @@ img_height <- 299L
 img_width <- 299L
 train_samples <- 65L
 validation_samples <- 10L
-epochs <- 5L
+epochs <- 1L
 batch_size <- 5L
 ```
 
