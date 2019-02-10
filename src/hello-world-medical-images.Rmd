@@ -183,6 +183,8 @@ validation_data_generator <- image_data_generator(
 <aside class="notes">We don't play around with validation data because we want it to be as similar to test data as possible</aside>
 <aside class="notes">Rescaling brings all the values of pixels in down to a maximum of one</aside>
 
+## Generators
+
 ```{r}
 train_generator <- train_data_generator$flow_from_directory(
   train_data_directory,
@@ -199,11 +201,18 @@ validation_generator <- validation_data_generator$flow_from_directory(
 )
 ```
 
+<aside class="notes">With large datasets, we can't hold everything in memory. Generators open an image, preprocess it, then send it to the neural net</aside>
+
 ## Transfer Learning
+
 - Google has a designed an archicture to identify images called Inception-v3
 - These architectures are tested on ImageNet, a global competition to classify 1.4 million images into 1000 categories
 
 ![https://kaggle.com/c/imagenet-object-localization-challenge](./img/imagenet-bananas.png)
+
+<aside class="notes">It seems crazy that a neural net trained to identify bananas can be quickly retrained for X-rays but remember those first layers few layers are only looking at corners and edges</aside>
+
+## Base Model
 
 ```{r}
 base_model <- application_inception_v3(
@@ -218,8 +227,7 @@ for (layer in base_model$layers)
   layer$trainable <- TRUE # This let's all the weights in the model to move
 ```
 
-
-TODO: Add explanation of transferring
+## Adding Our Own Layers 
 
 ```{r}
 model_top <- base_model$output %>% 
@@ -232,6 +240,12 @@ model_top <- base_model$output %>%
               trainable = TRUE,
               activation = "sigmoid")
 ```
+
+<aside class="notes">Global average pooling looks at the average activation of each convolution. This reduces computational complexity.</aside>
+<aside class="notes">Dense layers are also called fully-connected layers. Classic neural nets are made of these</aside>
+<aside class="notes">Dropout randomly turns activations to 0 during training to reduce overfitting. Seems crazy but it works.</aside>
+
+## Transferring the Model
 
 ```{r}
 full_model <- keras_model(
@@ -247,6 +261,8 @@ full_model <- keras_model(
   )  
 ```
 
+## Training the Model
+
 ```{r}
 history <- fit_generator( # Fit model
   full_model,
@@ -257,6 +273,8 @@ history <- fit_generator( # Fit model
   validation_steps = as.integer(validation_samples / batch_size)
 )
 ```
+
+## Summary of the Model
 
 ```{r}
 summary(full_model)
