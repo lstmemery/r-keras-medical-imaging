@@ -1,10 +1,11 @@
 ---
 title: "A First Glance at Neural Networks for Medical Computer Vision"
 author: "Matthew Emery"
-date: "January 12, 2019"
+date: "February 12, 2019"
 output: 
   revealjs::revealjs_presentation:
     theme: "night"
+    css: style.css
 bibliography: bibliography.bib
 ---
 
@@ -94,7 +95,20 @@ TODO: Get one of those dumb brain/machine images
  - This is a "toy" dataset
  - Can we train a model to tell the difference between an abdominal and chest radiograph?
 
+```{r}
+# Finding Training 
+root <- find_rstudio_root_file()
+train_data_directory <- path(root, "data", "TRAIN")
+validation_data_directory <- path(root, "data", "VAL")
+```
 
+```{r}
+knitr::include_graphics(path(train_data_directory, "openI_abd_xray", "openI_1.png"))
+```
+
+```{r}
+knitr::include_graphics(path(train_data_directory, "openI_CXR", "3_IM-1384-1001.png"))
+```
 
 ```{r}
 # Constants
@@ -116,28 +130,12 @@ batch_size <- 5L
 - The test set is only used after the model is completely trained.
 - The test set is used to compare between models.
 
-```{r}
-# Finding Training 
-root <- find_rstudio_root_file()
-train_data_directory <- path(root, "data", "TRAIN")
-validation_data_directory <- path(root, "data", "VAL")
-```
-
-```{r}
-knitr::include_graphics(path(train_data_directory, "openI_abd_xray", "openI_1.png"))
-```
-
-```{r}
-knitr::include_graphics(path(train_data_directory, "openI_CXR", "3_IM-1384-1001.png"))
-```
-
 ## Preparing images
 
-- Notice that these images are different sizes
-- Also the first image is slightly off-center
-- We want the network to be robust, so we will randomly change each image slightly
-
-TODO: Explain training generation
+ - Notice that these images are different sizes
+ - Also the first image is slightly off-center
+ - We want the network to be robust, so we will randomly change each image slightly
+ - This is called **data augmentation**
 
 ```{r}
 #Play around with this!
@@ -150,9 +148,7 @@ train_data_generator <- image_data_generator(
   height_shift_range = 0.2,
   horizontal_flip = TRUE
 )
-```
 
-```{r}
 validation_data_generator <- image_data_generator(
   rescale = 1/255
 )
@@ -165,9 +161,7 @@ train_generator <- train_data_generator$flow_from_directory(
   batch_size = batch_size,
   class_mode = "binary"
 )
-```
 
-```{r}
 validation_generator <- validation_data_generator$flow_from_directory(
   validation_data_directory,
   target_size = c(img_height, img_width),
