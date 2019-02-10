@@ -23,6 +23,7 @@ library(fs)
 TODO: Make font sizes larger
 
 ## Installation Guide
+
 1. Install R 3.5:
   - Windows: https://cran.r-project.org/bin/windows/base/
   - Mac: https://cran.r-project.org/bin/macosx/
@@ -37,12 +38,14 @@ TODO: Make font sizes larger
 
 - Alumni of the UBC Master of Data Science Program
 - Previously: Software Developer at STEMCELL Technologies
-- I am a senior data scientist at a Los Angeles-based start-up building simulation-based assessments
+- Senior data scientist at Imbellus Inc.
+
+<aside class="notes">Mention what Imbellus does</aside>
 
 ## Acknowledgements
 
  - There a bibliography at the end
- - This presentation is an adaptation of "Hello World Deep Learning in Medical Imaging"
+ - This presentation is an adaptation of [Hello World Deep Learning in Medical Imaging](https://link.springer.com/article/10.1007/s10278-018-0079-6)
  - [Fast.ai](https://www.fast.ai/) provides a great practioner's course on deep learning
 
 ## What is Machine Learning?
@@ -51,23 +54,26 @@ TODO: Make font sizes larger
 - Machine learning is when you have input data and known outputs learn an **unknown function**
 - Examples: Linear Regression, Random Forest, Neural Networks
 
-Aside: I'm talking only about **supervised learning** here
-
-TODO: Image here?
+<aside class="notes">I'm talking only about supervised learning here</aside>
 
 ## Why Should I Care About Neural Nets?
 
-- Training is more "end-to-end" (i.e. they can learn features about data)
-- They are much better at high visibility problems (Speech recognition, machine translation, computer vision)
-- Tech companies open source really big neural networks that you can adapt for your problems
+1. Training is more **end-to-end** (i.e. they can learn features about data)
+2. They perform well on problems that are **in vogue** 
+3. Tech companies **open-source** neural network architectures and frameworks
+
+<aside class="notes">1. Classic algorithms rely on feature engineering</aside>
+<aside class="notes">2. (Speech recognition, machine translation, computer vision)</aside>
+<aside class="notes">3. It is much easier to build neural nets than it was a couple of years ago. TensorFlow started 3 years ago</aside>
 
 ## What are Neural Nets? (Please, No Math)
 
 - They are NOT electronic brains
 - They are large arrays of numbers that get multiplied by one another
 - In between those multiplications, we apply a special function called an **activation function**
-
 - We slightly adjust these numbers using a fancy version of first year calculus
+
+<aside class="notes">1. Classic algorithms rely on </aside>
 
 ## What are Convolutional Neural Networks (CNNs)?
 
