@@ -20,8 +20,6 @@ library(rprojroot)
 library(fs)
 ```
 
-TODO: Make font sizes larger
-
 ## Installation Guide
 
  1. Install R 3.5: https://cran.r-project.org/
@@ -38,6 +36,7 @@ TODO: Make font sizes larger
 - Senior data scientist at Imbellus Inc.
 
 <aside class="notes">Mention what Imbellus does</aside>
+<aside class="notes">Many of my slides have notes. Check out the repo</aside>
 
 ## Acknowledgements
 
@@ -89,10 +88,6 @@ TODO: Make font sizes larger
 
 ![http://cs231n.github.io/understanding-cnn/](./img/1st-layer.jpeg)
 
-## Second Layer Activations
-
-![http://cs231n.github.io/understanding-cnn/](./img/2nd-layer.jpeg)
-
 ## How do you build neural networks?
 
 - There are many frameworks in many languages
@@ -105,7 +100,7 @@ TODO: Make font sizes larger
 
 - **Loss Function:** The function that the neural network is trying to minimize
 - **Batch Size:** The number of images we feed into the neural net at a time
-- **Epochs:** The number of times we see the whole training set
+- **Epochs:** The number of times the neural network sees the whole training set
 
 ## The Dataset
 
@@ -119,13 +114,19 @@ train_data_directory <- path(root, "data", "TRAIN")
 validation_data_directory <- path(root, "data", "VAL")
 ```
 
-```{r}
+## Abdomen
+
+```{r, echo=FALSE}
 knitr::include_graphics(path(train_data_directory, "openI_abd_xray", "openI_1.png"))
 ```
+
+## Chest
 
 ```{r}
 knitr::include_graphics(path(train_data_directory, "openI_CXR", "3_IM-1384-1001.png"))
 ```
+
+## Constants
 
 ```{r}
 # Constants
@@ -137,19 +138,23 @@ epochs <- 1L
 batch_size <- 5L
 ```
 
+<aside class="notes">Image height and width have to be 299x299 to use Inception</aside>
+<aside class="notes">This is a very small training set. You should probably use cross-validaiton instead</aside>
+<aside class="notes">Play around with the number of epochs and batch size and see how it affects your training speed.</aside>
+
 ## Overfitting
 
 - Separate your files into three groups, **training**, **validation** and **testing**
 - Think of them as textbook exercises, midterms and the final
 - If you overstudy on the only a few questions, you will have only memorized the answers without learning 
-- When a machine learning algorithm, this is called **overfitting**
+- In machine learning, we call this **overfitting**
 
 ## Model Validation
 
-- The validation set is used at the end of each epoch to guage overfitting. 
+- The **validation set** is used at the end of each epoch to **guage overfitting.** 
 - The neural net isn't allowed to learn from the validation set directly 
 - The test set is only used after the model is completely trained.
-- The test set is used to compare between models.
+- The test set is used to **compare between models**.
 
 ## Preparing images
 
@@ -174,6 +179,9 @@ validation_data_generator <- image_data_generator(
   rescale = 1/255
 )
 ```
+
+<aside class="notes">We don't play around with validation data because we want it to be as similar to test data as possible</aside>
+<aside class="notes">Rescaling brings all the values of pixels in down to a maximum of one</aside>
 
 ```{r}
 train_generator <- train_data_generator$flow_from_directory(
