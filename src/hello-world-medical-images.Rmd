@@ -59,8 +59,8 @@ TODO: Make font sizes larger
 ## Why Should I Care About Neural Nets?
 
 1. Training is more **end-to-end** (i.e. they can learn features about data)
-2. They perform well on problems that are **in vogue** 
-3. Tech companies **open-source** neural network architectures and frameworks
+2. They perform well on problems that are appealing
+3. Tech companies open-source neural network architectures and frameworks
 
 <aside class="notes">1. Classic algorithms rely on feature engineering</aside>
 <aside class="notes">2. (Speech recognition, machine translation, computer vision)</aside>
@@ -73,27 +73,38 @@ TODO: Make font sizes larger
 - In between those multiplications, we apply a special function called an **activation function**
 - We slightly adjust these numbers using a fancy version of first year calculus
 
-<aside class="notes">1. Classic algorithms rely on </aside>
+![https://hackernoon.com/artificial-neural-network-a843ff870338](./img/neural-net-diagram.png)
+
+<aside class="notes">A hidden layer is just a layer that where the input and outputs aren't directly observed</aside>
+<aside class="notes">The more hidden layers, the higher the capacity of the neural network</aside>
+<aside class="notes">You can brush up on the math you need with this paper: https://arxiv.org/abs/1802.01528</aside>
 
 ## What are Convolutional Neural Networks (CNNs)?
 
-- CNNs are neural networks that work very well for images (and a few other applications)
-- The idea is that basic features of an image (edges, corners etc.) are useful to know about regardless of where they appear in an image
-- This allows the network to "share weights" between different areas of an image
+- CNNs are neural networks that work very well for images
+- The idea is that basic features of an image (edges etc.) are useful to know about
+- Combinations of basic features can make more complex features further into the network
+- This allows the network to **share weights** between different areas of an image
+
+<aside class="notes">Other applications: Natural language processing, Video</aside>
 
 ![https://hackernoon.com/visualizing-parts-of-convolutional-neural-networks-using-keras-and-cats-5cc01b214e59](./img/convolution.gif)
 
+## First Layer Activations
+
+![http://cs231n.github.io/understanding-cnn/](./img/src/1st-layer.jpeg)
+
 ## How do you build neural networks?
+
 - There are many frameworks in many languages
 - The most popular language is Python
-- We are using the high level framework called Keras and R
+- We are using the high-level framework called Keras and R
 
 ## A Few Terms
-- Loss Function: The function that the neural network is trying to minimize
-- Batch Size: The number of images we feed into the neural net at a time
-- Epochs: The number of times we see the whole training set
 
-TODO: Get one of those dumb brain/machine images
+- **Loss Function:** The function that the neural network is trying to minimize
+- **Batch Size:** The number of images we feed into the neural net at a time
+- **Epochs:** The number of times we see the whole training set
 
 
 ## The Dataset
