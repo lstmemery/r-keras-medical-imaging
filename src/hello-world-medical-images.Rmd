@@ -13,7 +13,7 @@ bibliography: bibliography.bib
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE}
 library(tidyverse)
 library(keras)
 library(rprojroot)
@@ -26,7 +26,7 @@ library(fs)
  2. Install RStudio Desktop (Free): https://www.rstudio.com/products/rstudio/download/#download
  3. Download and extract the code to this talk: https://github.com/lstmemery/r-keras-medical-imaging/archive/master.zip
  4. Click on the .Rproj file
- 5. `packrat::restore()` (This will take a while, please do it before the talk)
+ 5. `packrat::restore()`
  6. `keras::install_keras()`
 
 ## Who Am I?
@@ -40,7 +40,7 @@ library(fs)
 
 ## Acknowledgements
 
- - There a bibliography at the end
+ - There is a bibliography in the repo
  - This presentation is an adaptation of [Hello World Deep Learning in Medical Imaging](https://link.springer.com/article/10.1007/s10278-018-0079-6)
  - [Fast.ai](https://www.fast.ai/) provides a great practioner's course on deep learning
 
@@ -66,7 +66,7 @@ library(fs)
 
 - They are large arrays of numbers that get multiplied by one another
 - In between those multiplications, we apply a special function called an **activation function**
-- Adjust these numbers using the **chain rule** for derivatives
+- Adjust these numbers using the **chain rule**
 
 ![https://hackernoon.com/artificial-neural-network-a843ff870338](./img/neural-net-diagram.png)
 
@@ -76,13 +76,13 @@ library(fs)
 
 ## What are Convolutional Neural Networks (CNNs)?
 
-- CNNs are neural networks that work very well for images
-- The idea is that basic features of an image (edges etc.) are useful to know about anywhere in the image
+- CNNs are neural nets that work well for images
+- Basic features of an image (edges etc.) are useful to know about anywhere in the image
 - This allows the network to **share weights** between different areas of an image
 
 <aside class="notes">Other applications: Natural language processing, Video</aside>
 
-![https://hackernoon.com/visualizing-parts-of-convolutional-neural-networks-using-keras-and-cats-5cc01b214e59](./img/convolution.gif)
+<img src="./img/convolution.gif" height="80%"" width="80%" alt="https://hackernoon.com/visualizing-parts-of-convolutional-neural-networks-using-keras-and-cats-5cc01b214e59">
 
 ## First Layer Activations
 
@@ -102,6 +102,20 @@ library(fs)
 - **Batch Size:** The number of images we feed into the neural net at a time
 - **Epochs:** The number of times the neural network sees the whole training set
 
+```{r}
+# Constants
+img_height <- 299L
+img_width <- 299L
+train_samples <- 65L
+validation_samples <- 10L
+epochs <- 5L
+batch_size <- 5L
+```
+
+<aside class="notes">Image height and width have to be 299x299 to use Inception</aside>
+<aside class="notes">This is a very small training set. You should probably use cross-validaiton instead</aside>
+<aside class="notes">Play around with the number of epochs and batch size and see how it affects your training speed.</aside>
+
 ## The Dataset
 
  - This is a "toy" dataset
@@ -116,31 +130,11 @@ validation_data_directory <- path(root, "data", "VAL")
 
 ## Abdomen
 
-```{r, echo=FALSE}
-knitr::include_graphics(path(train_data_directory, "openI_abd_xray", "openI_1.png"))
-```
+<img src="../data/TRAIN/openI_abd_xray/openI_1.png" height="125%"" width="125%" alt="">
 
 ## Chest
 
-```{r}
-knitr::include_graphics(path(train_data_directory, "openI_CXR", "3_IM-1384-1001.png"))
-```
-
-## Constants
-
-```{r}
-# Constants
-img_height <- 299L
-img_width <- 299L
-train_samples <- 65L
-validation_samples <- 10L
-epochs <- 1L
-batch_size <- 5L
-```
-
-<aside class="notes">Image height and width have to be 299x299 to use Inception</aside>
-<aside class="notes">This is a very small training set. You should probably use cross-validaiton instead</aside>
-<aside class="notes">Play around with the number of epochs and batch size and see how it affects your training speed.</aside>
+<img src="../data/TRAIN/openI_CXR/3_IM-1384-1001.png" height="125%"" width="125%" alt="">
 
 ## Overfitting
 
@@ -185,6 +179,8 @@ validation_data_generator <- image_data_generator(
 
 ## Generators
 
+ - **Binary classification** means there are only two classes
+
 ```{r}
 train_generator <- train_data_generator$flow_from_directory(
   train_data_directory,
@@ -214,6 +210,8 @@ validation_generator <- validation_data_generator$flow_from_directory(
 
 ## Base Model
 
+- **Inception-v3** is a state-of-the-art model
+
 ```{r}
 base_model <- application_inception_v3(
   weights = "imagenet",
@@ -227,11 +225,15 @@ for (layer in base_model$layers)
   layer$trainable <- TRUE # This let's all the weights in the model to move
 ```
 
-## Adding Our Own Layers 
+## Adding Our Own Layers
+
+- Pooling layers
+- Dense layers
+- Dropout layers
 
 ```{r}
 model_top <- base_model$output %>% 
-  layer_global_average_pooling_2d(trainable = TRUE) %>% # TODO explain this
+  layer_global_average_pooling_2d(trainable = TRUE) %>% 
   layer_dense(256L, 
               activation = "relu", # max(0, x)
               trainable = TRUE) %>% 
@@ -246,6 +248,9 @@ model_top <- base_model$output %>%
 <aside class="notes">Dropout randomly turns activations to 0 during training to reduce overfitting. Seems crazy but it works.</aside>
 
 ## Transferring the Model
+
+ - ADAM is a type of **gradient descent** method
+ - **Binary cross entropy** is a smooth loss function that works well when you have two classes
 
 ```{r}
 full_model <- keras_model(
@@ -274,11 +279,54 @@ history <- fit_generator( # Fit model
 )
 ```
 
-## Summary of the Model
+## Testing
+
+- Let's go see if the model works!
+
+![](../data/TEST/abd2.png)
+
+## Abdominal Prediction
 
 ```{r}
-summary(full_model)
+abdomen_test <- image_load("../data/TEST/abd2.png", target_size = c(299, 299)) %>% 
+  image_to_array() %>% 
+  array_reshape(dim = c(1, 299, 299, 3)) %>% 
+  imagenet_preprocess_input()
+
+abdomen_prediction <- full_model %>% 
+  predict(abdomen_test)
+
+if (abdomen_prediction < 0.5) {
+  print("Chest X-ray")
+} else {
+  print("Abdomen X-ray")
+}
 ```
 
+## Chest Prediction
 
-## Bibliography
+![](../data/TEST/chest2.png)
+
+## Chest Result
+
+```{r}
+chest_test <- image_load("../data/TEST/chest2.png", target_size = c(299, 299)) %>% 
+  image_to_array() %>% 
+  array_reshape(dim = c(1, 299, 299, 3)) %>% 
+  imagenet_preprocess_input()
+
+chest_prediction <- full_model %>% 
+  predict(abdomen_test)
+
+if (chest_prediction < 0.5) {
+  print("Chest X-ray")
+} else {
+  print("Abdomen X-ray")
+}
+```
+
+## What Happened?
+
+ - We overfit!
+ - We need more data
+ - You could also try smaller learning rates or less epochs
