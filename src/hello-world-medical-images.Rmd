@@ -1,7 +1,7 @@
 ---
 title: "A First Glance at Neural Networks for Medical Computer Vision"
 author: "Matthew Emery"
-date: "February 12, 2019"
+date: "April 16, 2019"
 output: 
   revealjs::revealjs_presentation:
     theme: "night"
@@ -24,39 +24,47 @@ library(fs)
 
  1. Install R 3.5: https://cran.r-project.org/
  2. Install RStudio Desktop (Free): https://www.rstudio.com/products/rstudio/download/#download
- 3. Download and extract the code to this talk: https://github.com/lstmemery/r-keras-medical-imaging/archive/master.zip
- 4. Click on the .Rproj file
- 5. `packrat::restore()`
- 6. `keras::install_keras()`
+ 3. Install Miniconda: https://docs.conda.io/en/latest/miniconda.html
+ 4. Download and extract the code to this talk: https://github.com/lstmemery/r-keras-medical-imaging/archive/master.zip
+ 5. Click on the .Rproj file
+ 6. `packrat::restore()`
+ 7. `keras::install_keras()`
 
 ## Who Am I?
 
-- Alumni of the UBC Master of Data Science Program
-- Previously: Software Developer at STEMCELL Technologies
-- Senior data scientist at Imbellus Inc.
+<div id="left">
 
+  - Alumni of the UBC Master of Data Science Program
+  - Previously: Software Developer at STEMCELL Technologies
+  - Senior data scientist at Imbellus Inc.
+
+</div>
+
+<div id="right">
+  <img src="img/bloomberg.jpg">
+</div>
 <aside class="notes">Mention what Imbellus does</aside>
-<aside class="notes">Many of my slides have notes. Check out the repo</aside>
+<aside class="notes">Many of my slides have notes. Check out the repo.</aside>
 
 ## Acknowledgements
 
  - There is a bibliography in the repo
  - This presentation is an adaptation of [Hello World Deep Learning in Medical Imaging](https://link.springer.com/article/10.1007/s10278-018-0079-6)
- - [Fast.ai](https://www.fast.ai/) provides a great practioner's course on deep learning
+ - [Fast.ai](https://www.fast.ai/) provides a great practitioner's course on deep learning
 
 ## What is Machine Learning?
 
-- Most of the time, programmers have input data and they apply a **known function** to get an unknown output
-- Machine learning is when you have input data and known outputs learn an **unknown function**
+- Most of the time, programmers have input data and they apply a **known function** to get an unknown output.
+- Machine learning is when you have input data and known outputs learn an **unknown function**.
 - Examples: Linear Regression, Random Forest, Neural Networks
 
 <aside class="notes">I'm talking only about supervised learning here</aside>
 
 ## Why Should I Care About Neural Nets?
 
-1. Training is more **end-to-end** (i.e. they can learn features about data)
-2. They perform well on problems that are appealing
-3. Tech companies open-source neural network architectures and frameworks
+1. Training is more **end-to-end** (i.e. they can learn features about data).
+2. They perform well on problems that are appealing.
+3. Tech companies open-source neural network architectures and frameworks.
 
 <aside class="notes">1. Classic algorithms rely on feature engineering</aside>
 <aside class="notes">2. (Speech recognition, machine translation, computer vision)</aside>
@@ -64,25 +72,31 @@ library(fs)
 
 ## What are Neural Nets? (Please, No Math)
 
-- They are large arrays of numbers that get multiplied by one another
-- In between those multiplications, we apply a special function called an **activation function**
-- Adjust these numbers using the **chain rule**
+<div id="left">
+  - They are large arrays of numbers that get multiplied by one another
+  - In between those multiplications, we apply a special function called an **activation function**
+  - Adjust these numbers using the **chain rule**
+</div>
 
+<div id="right">
 ![https://hackernoon.com/artificial-neural-network-a843ff870338](./img/neural-net-diagram.png)
-
+</div>
 <aside class="notes">A hidden layer is just a layer that where the input and outputs aren't directly observed</aside>
 <aside class="notes">The more hidden layers, the higher the capacity of the neural network</aside>
 <aside class="notes">You can brush up on the math you need with this paper: https://arxiv.org/abs/1802.01528</aside>
 
 ## What are Convolutional Neural Networks (CNNs)?
 
-- CNNs are neural nets that work well for images
-- Basic features of an image (edges etc.) are useful to know about anywhere in the image
-- This allows the network to **share weights** between different areas of an image
+<div id="left">
+  - CNNs are neural nets that work well for images
+  - Basic features of an image (edges etc.) are useful to know about anywhere in the image
+  - This allows the network to **share weights** between different areas of an image
+</div>
 
+<div id="right">
+  <img src="./img/convolution.gif" alt="https://hackernoon.com/visualizing-parts-of-convolutional-neural-networks-using-keras-and-cats-5cc01b214e59">
+</div>
 <aside class="notes">Other applications: Natural language processing, Video</aside>
-
-<img src="./img/convolution.gif" height="80%"" width="80%" alt="https://hackernoon.com/visualizing-parts-of-convolutional-neural-networks-using-keras-and-cats-5cc01b214e59">
 
 ## First Layer Activations
 
@@ -93,6 +107,8 @@ library(fs)
 - There are many frameworks in many languages
 - The most popular language is **Python**
 - We are using the high-level framework called **Keras** and **R**
+
+![https://github.com/keras-team/keras](./img/keras.png)
 
 <aside class="notes">Other popular frameworks: TensorFlow (Keras is built on top) and PyTorch</aside>
 
@@ -108,17 +124,17 @@ img_height <- 299L
 img_width <- 299L
 train_samples <- 65L
 validation_samples <- 10L
-epochs <- 5L
+epochs <- 3L
 batch_size <- 5L
 ```
 
 <aside class="notes">Image height and width have to be 299x299 to use Inception</aside>
-<aside class="notes">This is a very small training set. You should probably use cross-validaiton instead</aside>
+<aside class="notes">This is a very small training set. You should probably use cross-validation instead</aside>
 <aside class="notes">Play around with the number of epochs and batch size and see how it affects your training speed.</aside>
 
 ## The Dataset
 
- - This is a "toy" dataset
+ - This is a "toy" dataset.
  - Can we train a model to tell the difference between an abdominal and chest radiograph?
 
 ```{r}
@@ -130,32 +146,32 @@ validation_data_directory <- path(root, "data", "VAL")
 
 ## Abdomen
 
-<img src="../data/TRAIN/openI_abd_xray/openI_1.png" height="125%"" width="125%" alt="">
+<img src="../data/TRAIN/openI_abd_xray/openI_1.png" width="70%" height="70%" alt="Abdomen Example">
 
 ## Chest
 
-<img src="../data/TRAIN/openI_CXR/3_IM-1384-1001.png" height="125%"" width="125%" alt="">
+<img src="../data/TRAIN/openI_CXR/3_IM-1384-1001.png" alt="Chest Example">
 
 ## Overfitting
 
-- Separate your files into three groups, **training**, **validation** and **testing**
+- Separate your files into three groups, **training**, **validation** and **testing**.
 - Think of them as textbook exercises, midterms and the final
-- If you overstudy on the only a few questions, you will have only memorized the answers without learning 
-- In machine learning, we call this **overfitting**
+- If you cram on the only a few questions, you will have only memorized the answers without learning.
+- In machine learning, we call this **overfitting**.
 
 ## Model Validation
 
-- The **validation set** is used at the end of each epoch to **guage overfitting.** 
-- The neural net isn't allowed to learn from the validation set directly 
+- The **validation set** is used at the end of each epoch to **guage overfitting.**.
+- The neural net isn't allowed to learn from the validation set directly.
 - The test set is only used after the model is completely trained.
 - The test set is used to **compare between models**.
 
 ## Preparing images
 
- - Notice that these images are different sizes
- - Also the first image is slightly off-center
- - We want the network to be robust, so we will randomly change each image slightly
- - This is called **data augmentation**
+ - Notice that these images are different sizes.
+ - Also the first image is slightly off-center.
+ - We want the network to be robust, so we will randomly change each image slightly.
+ - This is called **data augmentation**.
 
 ```{r}
 #Play around with this!
@@ -175,11 +191,11 @@ validation_data_generator <- image_data_generator(
 ```
 
 <aside class="notes">We don't play around with validation data because we want it to be as similar to test data as possible</aside>
-<aside class="notes">Rescaling brings all the values of pixels in down to a maximum of one</aside>
+<aside class="notes">Re-scaling brings all the values of pixels in down to a maximum of one</aside>
 
 ## Generators
 
- - **Binary classification** means there are only two classes
+ - **Binary classification** means there are only two classes.
 
 ```{r}
 train_generator <- train_data_generator$flow_from_directory(
@@ -201,8 +217,8 @@ validation_generator <- validation_data_generator$flow_from_directory(
 
 ## Transfer Learning
 
-- Google has a designed an archicture to identify images called Inception-v3
-- These architectures are tested on ImageNet, a global competition to classify 1.4 million images into 1000 categories
+- Google has a designed an architecture to identify images called Inception-v3.
+- These architectures are tested on ImageNet, a global competition to classify 1.4 million images into 1000 categories.
 
 ![https://kaggle.com/c/imagenet-object-localization-challenge](./img/imagenet-bananas.png)
 
@@ -210,7 +226,7 @@ validation_generator <- validation_data_generator$flow_from_directory(
 
 ## Base Model
 
-- **Inception-v3** is a state-of-the-art model
+- **Inception-v3** is a state-of-the-art model.
 
 ```{r}
 base_model <- application_inception_v3(
@@ -220,9 +236,6 @@ base_model <- application_inception_v3(
                   img_height, 
                   3L) # Three color channels
 )
-
-for (layer in base_model$layers)
-  layer$trainable <- TRUE # This let's all the weights in the model to move
 ```
 
 ## Adding Our Own Layers
@@ -233,33 +246,36 @@ for (layer in base_model$layers)
 
 ```{r}
 model_top <- base_model$output %>% 
-  layer_global_average_pooling_2d(trainable = TRUE) %>% 
+  layer_global_average_pooling_2d() %>% 
   layer_dense(256L, 
               activation = "relu", # max(0, x)
-              trainable = TRUE) %>% 
+              ) %>% 
   layer_dropout(0.5) %>% 
-  layer_dense(1L,
-              trainable = TRUE,
-              activation = "sigmoid")
+  layer_dense(1L, activation = "sigmoid")
 ```
 
 <aside class="notes">Global average pooling looks at the average activation of each convolution. This reduces computational complexity.</aside>
 <aside class="notes">Dense layers are also called fully-connected layers. Classic neural nets are made of these</aside>
-<aside class="notes">Dropout randomly turns activations to 0 during training to reduce overfitting. Seems crazy but it works.</aside>
+<aside class="notes">Dropout randomly turns activation to 0 during training to reduce overfitting. Seems crazy but it works.</aside>
 
 ## Transferring the Model
 
- - ADAM is a type of **gradient descent** method
- - **Binary cross entropy** is a smooth loss function that works well when you have two classes
+ - ADAM is a type of **gradient descent** method.
+ - **Binary cross entropy** is a smooth loss function that works well when you have two classes.
 
 ```{r}
+freeze_weights(base_model)
+
 full_model <- keras_model(
   inputs = base_model$input,
   outputs = model_top) %>% 
   keras::compile(
     optimizer = optimizer_adam(
       lr = 0.0001, # How much do we update weights?
-      epsilon = 1e-08 # Prevents Divide by 0 errors
+      epsilon = 1e-08, # Prevents Divide by 0 errors
+      beta_1 = 0.9,
+      beta_2 = 0.999,
+      decay = 0.0
     ),
     loss = "binary_crossentropy",
     metrics = c("accuracy")
@@ -328,5 +344,11 @@ if (chest_prediction < 0.5) {
 ## What Happened?
 
  - We overfit!
- - We need more data
- - You could also try smaller learning rates or less epochs
+ - We need more data.
+ - You could also try smaller learning rates or less epochs.
+
+## Conclusion
+
+ - Anyone can make a neural network.
+ - Be careful about overfitting.
+ - The better your data, the better your model.
